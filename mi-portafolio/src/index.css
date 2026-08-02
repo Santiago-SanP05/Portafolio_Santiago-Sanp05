@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+@theme {
+  /* ========= Brand ========= */
+  --color-primary: #1E3A8A;      /* Azul rey */
+  --color-surface: #16213E;      /* Azul marino oscuro (cards/paneles) */
+  --color-secondary: #E9724C;    /* Naranja quemado / coral */
+  --color-accent: #F2A365;       /* Naranja cálido suave */
+  --color-highlight: #F6C453;    /* Dorado / amarillo mostaza */
+
+  /* ========= Background ========= */
+  --color-background: #0A1128;   /* Azul rey muy oscuro, casi negro */
+  --color-background-alt: #10254B; /* Azul oscuro un poco más claro */
+
+  /* ========= Text ========= */
+  --color-text-primary: #F8F9FA;
+  --color-text-secondary: #B8C1D1;
+  --color-text-dark: #0A1128;
+
+  /* ========= Border ========= */
+  --color-border: #2A3A5C;
+
+  /* ========= Status ========= */
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-info: #3B82F6;
+
+  /* ========= Fonts ========= */
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
