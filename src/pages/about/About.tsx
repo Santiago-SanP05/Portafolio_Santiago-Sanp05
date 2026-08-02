@@ -11,7 +11,7 @@ const HEX_CLIP = "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
 type QuickFact = { label: string; value: string };
 type TimelineItem = { period: string; role: string; place: string; description: string };
 
-const AVATAR_SRC = "/avatar.jpg";
+const AVATAR_SRC = "/imgFace/Face.png";
 
 function Avatar() {
   const { t } = useTranslation();
