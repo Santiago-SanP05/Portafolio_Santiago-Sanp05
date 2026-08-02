@@ -2,6 +2,37 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
+/**
+ * config/i18n.ts — configuración de idioma para el portafolio.
+ *
+ * Import esto UNA sola vez, en tu punto de entrada (src/main.tsx),
+ * antes de renderizar <App />:
+ *
+ *   import "./config/i18n";
+ *
+ * Uso en cualquier componente:
+ *
+ *   import { useTranslation } from "react-i18next";
+ *   function MiComponente() {
+ *     const { t } = useTranslation();
+ *     return <h1>{t("home.titleLine1")}</h1>;
+ *   }
+ *
+ * Para arrays (timeline de About, items de Projects/Skill), usa
+ * returnObjects, y OJO: si ese array se usa para construir estado o
+ * layout derivado (como el panal de Skill), tiene que recalcularse
+ * cuando cambia el idioma — mételo en un useMemo con `i18n.language`
+ * (o el propio array) en las dependencias, si no, queda pegado en el
+ * idioma con el que montó el componente.
+ *
+ *   const items = t("skill.items", { returnObjects: true }) as SkillI18n[];
+ *
+ * IMPORTANTE: los datos que NO dependen del idioma (nombre, correo,
+ * teléfono, URLs, rutas de imágenes, nombres de tecnologías, niveles
+ * numéricos, títulos de proyecto) NO viven aquí — se quedan como
+ * constantes literales en cada componente.
+ */
+
 const resources = {
   es: {
     translation: {
@@ -21,6 +52,7 @@ const resources = {
       about: {
         badge: "SOBRE MÍ",
         greeting: "Hola, soy",
+        availableBadge: "Disponible",
         bioP1:
           "Desarrollador frontend junior apasionado por la tecnología y el desarrollo de software, con habilidades en múltiples lenguajes de programación y un enfoque orientado a la mejora continua. Busco oportunidades para aplicar mis conocimientos en proyectos desafiantes y crecer profesionalmente dentro del ámbito del desarrollo Full Stack.",
         bioP2:
@@ -150,6 +182,7 @@ const resources = {
       about: {
         badge: "ABOUT ME",
         greeting: "Hi, I'm",
+        availableBadge: "Available",
         bioP1:
           "Junior frontend developer passionate about technology and software development, with skills across multiple programming languages and a continuous-improvement mindset. Looking for opportunities to apply my knowledge on challenging projects and grow professionally within Full Stack development.",
         bioP2:
@@ -264,16 +297,16 @@ const resources = {
 };
 
 i18n
-  .use(LanguageDetector)
+  .use(LanguageDetector) // detecta el idioma del navegador / localStorage
   .use(initReactI18next)
   .init({
     resources,
     fallbackLng: "es",
     supportedLngs: ["es", "en"],
-    interpolation: { escapeValue: false },
+    interpolation: { escapeValue: false }, // React ya escapa por defecto
     detection: {
       order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
+      caches: ["localStorage"], // recuerda la elección del usuario
     },
   });
 

@@ -506,7 +506,6 @@ function Skill() {
       <GhostHexField />
       <HudFrame />
 
-      {/* Encabezado */}
       <header className="relative z-10 shrink-0 px-6 pt-8 text-center sm:pt-10">
         <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-background-alt/60 px-4 py-1.5 font-mono text-xs tracking-widest text-text-secondary">
           <span className="h-1.5 w-1.5 rounded-full bg-highlight" />

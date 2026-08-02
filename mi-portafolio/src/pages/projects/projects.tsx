@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ProjectsBackground3D from "../../components/Projectsbackground3d";
 
-
 type ProjectMeta = {
   number: string;
   title: string;
@@ -59,14 +58,6 @@ function GitHubIcon({ className = "h-4 w-4" }: { className?: string }) {
   );
 }
 
-function ExternalIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className={className}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M14 5h5m0 0v5m0-5L10 14M9 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-3" />
-    </svg>
-  );
-}
-
 function ProjectPanel({
   meta,
   i18nData,
@@ -90,7 +81,7 @@ function ProjectPanel({
       onClick={onActivate}
       onFocus={onActivate}
       tabIndex={0}
-      className={`project-panel-enter relative h-full cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface/40 backdrop-blur-sm transition-[flex-grow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus-visible:ring-2 ${accent.ring}`}
+      className={`project-panel-enter relative min-h-16 w-full cursor-pointer overflow-hidden rounded-2xl border border-border bg-surface/40 backdrop-blur-sm transition-[flex-grow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus-visible:ring-2 md:h-full md:w-auto ${accent.ring}`}
       style={{ flexGrow: isActive ? 5 : 1, flexBasis: 0, animationDelay: `${index * 120}ms` }}
     >
       {meta.image && (
@@ -101,8 +92,8 @@ function ProjectPanel({
       )}
 
       <span
-        className={`pointer-events-none absolute -bottom-6 -right-2 select-none font-display font-bold text-text-primary/[0.04] transition-all duration-700 ${
-          isActive ? "text-[14rem]" : "text-[9rem]"
+        className={`pointer-events-none absolute -bottom-4 -right-1 select-none font-display font-bold text-text-primary/[0.04] transition-all duration-700 sm:-bottom-6 sm:-right-2 ${
+          isActive ? "text-[7rem] sm:text-[10rem] md:text-[14rem]" : "text-[4.5rem] sm:text-[6rem] md:text-[9rem]"
         }`}
       >
         {meta.number}
@@ -111,19 +102,19 @@ function ProjectPanel({
       <div className={`absolute inset-x-0 top-0 z-10 h-[3px] bg-gradient-to-r ${accent.from} to-transparent`} />
 
       <div
-        className={`absolute inset-0 z-10 flex flex-col items-center justify-between p-6 transition-opacity duration-500 ${
+        className={`absolute inset-0 z-10 flex flex-row items-center justify-between p-4 transition-opacity duration-500 md:flex-col md:p-6 ${
           isActive ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
         <span className={`font-mono text-xs ${accent.text}`}>{meta.number}</span>
-        <span className="font-display text-lg font-semibold tracking-tight text-text-primary [writing-mode:vertical-rl]">
+        <span className="font-display text-base font-semibold tracking-tight text-text-primary md:text-lg md:[writing-mode:vertical-rl]">
           {meta.title}
         </span>
-        <span className="h-6 w-px bg-border" />
+        <span className="h-px w-6 bg-border md:h-6 md:w-px" />
       </div>
 
       <div
-        className={`absolute inset-0 z-10 flex flex-col justify-end p-7 transition-opacity duration-500 sm:p-9 ${
+        className={`absolute inset-0 z-10 flex flex-col justify-end p-5 transition-opacity duration-500 sm:p-7 md:p-9 ${
           isActive ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
         }`}
       >
@@ -131,16 +122,16 @@ function ProjectPanel({
           {t("projects.projectLabel")} {meta.number}
         </span>
 
-        <h3 className="font-display text-2xl font-bold leading-tight text-text-primary sm:text-3xl">
+        <h3 className="font-display text-xl font-bold leading-tight text-text-primary sm:text-2xl md:text-3xl">
           {meta.title}
         </h3>
         <p className="mt-1 text-sm text-text-secondary sm:text-base">{i18nData.tagline}</p>
 
-        <p className="mt-4 max-w-md text-sm leading-relaxed text-text-secondary">
+        <p className="mt-3 max-w-md text-xs leading-relaxed text-text-secondary sm:mt-4 sm:text-sm">
           {i18nData.description}
         </p>
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        <div className="mt-4 flex flex-wrap gap-2 sm:mt-5">
           {meta.tech.map((tech) => (
             <span
               key={tech}
@@ -151,7 +142,7 @@ function ProjectPanel({
           ))}
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-5 flex flex-wrap gap-3 sm:mt-6">
           <a
             href={meta.github}
             target="_blank"
@@ -176,24 +167,21 @@ function Projects() {
 
   return (
     <div className="relative h-screen w-full overflow-hidden bg-background font-body">
-      {/* Fondo 3D */}
       <div className="absolute inset-0 z-0">
         <ProjectsBackground3D />
       </div>
 
-      <div className="pointer-events-none absolute -left-24 top-0 z-0 h-[24rem] w-[24rem] rounded-full bg-primary/20 blur-[130px]" />
-      <div className="pointer-events-none absolute -right-24 bottom-0 z-0 h-[24rem] w-[24rem] rounded-full bg-secondary/15 blur-[130px]" />
+      <div className="pointer-events-none absolute -left-24 top-0 z-0 h-64 w-64 rounded-full bg-primary/20 blur-[100px] sm:h-[24rem] sm:w-[24rem] sm:blur-[130px]" />
+      <div className="pointer-events-none absolute -right-24 bottom-0 z-0 h-64 w-64 rounded-full bg-secondary/15 blur-[100px] sm:h-[24rem] sm:w-[24rem] sm:blur-[130px]" />
 
-
-
-      <div className="relative z-10 flex h-full w-full flex-col px-5 pb-6 pt-24 sm:px-8 lg:px-10">
-        <div className="mb-5 flex items-end justify-between">
+      <div className="relative z-10 flex h-full w-full flex-col px-4 pb-4 pt-20 sm:px-8 sm:pb-6 sm:pt-24 lg:px-10">
+        <div className="mb-4 flex items-end justify-between sm:mb-5">
           <div>
             <span className="mb-2 inline-flex items-center gap-2 rounded-full border border-border bg-background-alt/60 px-4 py-1.5 font-mono text-xs tracking-widest text-text-secondary">
               <span className="h-1.5 w-1.5 rounded-full bg-highlight" />
               {t("projects.badge")}
             </span>
-            <h1 className="font-display text-2xl font-semibold tracking-tight text-text-primary sm:text-3xl">
+            <h1 className="font-display text-xl font-semibold tracking-tight text-text-primary sm:text-2xl md:text-3xl">
               {t("projects.titlePart1")}{" "}
               <span className="bg-gradient-to-r from-secondary via-accent to-highlight bg-clip-text text-transparent">
                 {t("projects.titlePart2")}
@@ -203,10 +191,7 @@ function Projects() {
           <p className="hidden font-mono text-xs text-text-secondary sm:block">{t("projects.hint")}</p>
         </div>
 
-
-
-
-        <div className="flex min-h-0 flex-1 gap-4">
+        <div className="flex min-h-0 flex-1 flex-col gap-3 sm:gap-4 md:flex-row">
           {PROJECTS_META.map((meta, i) => (
             <ProjectPanel
               key={meta.title}
