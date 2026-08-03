@@ -3,19 +3,16 @@ import { useTranslation } from "react-i18next";
 
 
 type SkillMeta = { name: string; level: number };
-type SkillData = SkillMeta & { description: string };
 
 const SKILLS_META: SkillMeta[] = [
-  { name: "React", level: 95 },
-  { name: "TypeScript", level: 88 },
-  { name: "Tailwind CSS", level: 92 },
-  { name: "Next.js", level: 85 },
-  { name: "Node.js", level: 85 },
-  { name: "GraphQL", level: 78 },
-  { name: "Git", level: 90 },
-  { name: "PostgreSQL", level: 75 },
-  { name: "Docker", level: 70 },
-  { name: "Figma", level: 75 },
+  { name: "JavaScript", level: 90 },
+  { name: "React", level: 80 },
+  { name: "TypeScript", level: 76 },
+  { name: "Angular", level: 72 },
+  { name: "Tailwind CSS", level: 85 },
+  { name: "Git & GitHub", level: 85 },
+  { name: "Figma", level: 90 },
+  { name: "UI/UX", level: 69 },
 ];
 
 
@@ -24,8 +21,8 @@ const HEX_W = HEX_SIZE * 2;
 const HEX_H = Math.sqrt(3) * HEX_SIZE;
 const CENTER_W = HEX_W * 1.2;
 const CENTER_H = HEX_H * 1.2;
-const HONEYCOMB_W = 48;
-const HONEYCOMB_H = 52;
+const HONEYCOMB_W = 48; 
+const HONEYCOMB_H = 52; 
 
 const HEX_CLIP = "polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)";
 const PRIMARY_RGB = "30,58,138";
@@ -61,9 +58,9 @@ function axialToRem(q: number, r: number) {
   return { x, y };
 }
 
-type Cell = { q: number; r: number; ring: 1 | 2 | 3; skill?: SkillData };
+type Cell = { q: number; r: number; ring: 1 | 2 | 3; skill?: SkillMeta };
 
-function buildCells(skills: SkillData[]): Cell[] {
+function buildCells(skills: SkillMeta[]): Cell[] {
   const cells: Cell[] = [];
   let i = 0;
 
@@ -73,7 +70,7 @@ function buildCells(skills: SkillData[]): Cell[] {
   });
 
   const ring2Pattern: boolean[] = [
-    true, true, false, true, false, true, false, true, false, true, false, true,
+    true, false, true, false, false, true, false, false, true, false, false, true,
   ];
   hexRing(2).forEach((hex, idx) => {
     cells.push({ ...hex, ring: 2, skill: ring2Pattern[idx] ? skills[i++] : undefined });
@@ -86,6 +83,13 @@ function buildCells(skills: SkillData[]): Cell[] {
   return cells;
 }
 
+const CELLS = buildCells(SKILLS_META);
+const RING_CELLS: Record<1 | 2 | 3, Cell[]> = {
+  1: CELLS.filter((c) => c.ring === 1),
+  2: CELLS.filter((c) => c.ring === 2),
+  3: CELLS.filter((c) => c.ring === 3),
+};
+
 const RING_CONFIG: Record<1 | 2 | 3, { duration: number; dir: "cw" | "ccw" }> = {
   1: { duration: 46, dir: "cw" },
   2: { duration: 74, dir: "ccw" },
@@ -93,7 +97,6 @@ const RING_CONFIG: Record<1 | 2 | 3, { duration: number; dir: "cw" | "ccw" }> = 
 };
 
 const FAKE_OPACITY: Record<1 | 2 | 3, number> = { 1: 0.3, 2: 0.15, 3: 0.06 };
-
 
 function buildHexRingPath(innerScale: number): string {
   const cx = 50;
@@ -120,10 +123,7 @@ function CenterHex() {
       className="pointer-events-none absolute left-1/2 top-1/2 z-20"
       style={{ width: `${CENTER_W}rem`, height: `${CENTER_H}rem`, transform: "translate(-50%,-50%)" }}
     >
-      <svg
-        viewBox="0 0 100 86.6"
-        className="h-full w-full drop-shadow-[0_0_36px_rgba(233,114,76,0.5)]"
-      >
+      <svg viewBox="0 0 100 86.6" className="h-full w-full drop-shadow-[0_0_36px_rgba(233,114,76,0.5)]">
         <path d={path} fillRule="evenodd" fill={`rgba(${SECONDARY_RGB},0.95)`} />
       </svg>
     </div>
@@ -144,7 +144,6 @@ function CenterPulse() {
     </div>
   );
 }
-
 
 function RadarGuides() {
   const radii = [1, 2, 3].map((r) => HEX_SIZE * 1.5 * r);
@@ -186,8 +185,7 @@ function RadarSweep() {
   );
 }
 
-
-function SkillHex({ skill }: { skill: SkillData }) {
+function SkillHex({ skill }: { skill: SkillMeta }) {
   const { t } = useTranslation();
   const [flipped, setFlipped] = useState(false);
 
@@ -223,7 +221,7 @@ function SkillHex({ skill }: { skill: SkillData }) {
         </div>
 
         <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-1 px-3 text-center drop-shadow-[0_10px_20px_rgba(10,17,40,0.5)]"
+          className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 px-3 text-center drop-shadow-[0_10px_20px_rgba(10,17,40,0.5)]"
           style={{
             clipPath: HEX_CLIP,
             backfaceVisibility: "hidden",
@@ -235,14 +233,13 @@ function SkillHex({ skill }: { skill: SkillData }) {
           <span className="font-mono text-[9px] uppercase tracking-widest text-text-dark/70">
             {t("skill.levelLabel")}
           </span>
-          <span className="font-display text-lg font-bold text-text-dark">{skill.level}%</span>
-          <p className="text-[9px] leading-tight text-text-dark/80">{skill.description}</p>
+          <span className="font-display text-2xl font-bold text-text-dark">{skill.level}%</span>
+          <span className="font-display text-sm font-semibold text-text-dark/80">{skill.name}</span>
         </div>
       </div>
     </button>
   );
 }
-
 
 function FakeHex({ ring }: { ring: 1 | 2 | 3 }) {
   return (
@@ -259,7 +256,6 @@ function FakeHex({ ring }: { ring: 1 | 2 | 3 }) {
     />
   );
 }
-
 
 function useParticles(count: number) {
   return useMemo(
@@ -302,7 +298,6 @@ function Particles() {
     </div>
   );
 }
-
 
 function HudFrame() {
   const { t } = useTranslation();
@@ -372,7 +367,6 @@ function GhostHexField() {
   );
 }
 
-
 function TechMarquee() {
   const loopItems = [...SKILLS_META, ...SKILLS_META];
   return (
@@ -391,7 +385,6 @@ function TechMarquee() {
     </div>
   );
 }
-
 
 function FitToScreen({
   naturalWidth,
@@ -429,8 +422,7 @@ function FitToScreen({
   );
 }
 
-
-function RadialHoneycomb({ ringCells }: { ringCells: Record<1 | 2 | 3, Cell[]> }) {
+function RadialHoneycomb() {
   return (
     <div className="relative mx-auto" style={{ width: `${HONEYCOMB_W}rem`, height: `${HONEYCOMB_H}rem` }}>
       <RadarGuides />
@@ -448,7 +440,7 @@ function RadialHoneycomb({ ringCells }: { ringCells: Record<1 | 2 | 3, Cell[]> }
             className="orbit-ring absolute left-1/2 top-1/2"
             style={{ animation: `${ringAnim} ${config.duration}s linear infinite` }}
           >
-            {ringCells[ringNum].map((cell) => {
+            {RING_CELLS[ringNum].map((cell) => {
               const { x, y } = axialToRem(cell.q, cell.r);
               const style: CSSProperties = {
                 transform: `translate(calc(-50% + ${x}rem), calc(-50% + ${y}rem))`,
@@ -474,23 +466,8 @@ function RadialHoneycomb({ ringCells }: { ringCells: Record<1 | 2 | 3, Cell[]> }
   );
 }
 
-
 function Skill() {
-  const { t, i18n } = useTranslation();
-
-  const ringCells = useMemo(() => {
-    const descriptions = t("skill.items", { returnObjects: true }) as { description: string }[];
-    const skills: SkillData[] = SKILLS_META.map((meta, i) => ({
-      ...meta,
-      description: descriptions[i]?.description ?? "",
-    }));
-    const cells = buildCells(skills);
-    return {
-      1: cells.filter((c) => c.ring === 1),
-      2: cells.filter((c) => c.ring === 2),
-      3: cells.filter((c) => c.ring === 3),
-    } satisfies Record<1 | 2 | 3, Cell[]>;
-  }, [i18n.language]);
+  const { t } = useTranslation();
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-background font-body">
@@ -522,7 +499,7 @@ function Skill() {
 
       <div className="relative z-10 min-h-0 flex-1">
         <FitToScreen naturalWidth={HONEYCOMB_W * 16} naturalHeight={HONEYCOMB_H * 16}>
-          <RadialHoneycomb ringCells={ringCells} />
+          <RadialHoneycomb />
         </FitToScreen>
       </div>
 
